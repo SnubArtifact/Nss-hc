@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  Member
+  Excomm
+  Coordinator
+  Trio
+}
+
+model Department {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  users User[]
+}
+
+enum HourCategories {
+  Dept
+  Meet
+  Event
+  Misc
+}
+
+model User {
+  id             Int        @id @default(autoincrement())
+  email          String     @unique
+  name           String
+  role           Role       @default(Member)
+  createdAt      DateTime   @default(now())
+  departmentId   Int
+  department     Department @relation(fields: [departmentId], references: [id])
+  hourLogs       HourLogs[]
+  hourCountDept  Float      @default(0.0)
+  hourCountMeet  Float      @default(0.0)
+  hourCountEvent Float      @default(0.0)
+  hourCountMisc  Float      @default(0.0)
+}
+
+model HourLogs {
+  id            Int            @id @default(autoincrement())
+  startTime     DateTime
+  endTime       DateTime
+  submittedAt   DateTime       @default(now())
+  userId        Int
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  task          String
+  seniorPresent String?
+  category      HourCategories @default(Misc)
+}
+
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt DateTime
+}

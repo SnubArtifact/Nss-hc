@@ -1,0 +1,18 @@
+# Common
+node_modules/
+.env
+.env.local
+.env.*.local
+dist/
+build/
+.DS_Store
+*.log
+
+# Frontend
+NSS_Hour_Count_Frontend/node_modules/
+NSS_Hour_Count_Frontend/dist/
+
+# Backend
+nss-hour-count-backend/node_modules/
+nss-hour-count-backend/dist/
+nss-hour-count-backend/.env

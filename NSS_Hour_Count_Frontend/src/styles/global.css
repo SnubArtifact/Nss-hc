@@ -1,0 +1,392 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  font-family: Inter, system-ui, sans-serif;
+  background: #f4f6fb;
+  color: #0f172a;
+}
+
+.page {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.center {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  color: white;
+}
+
+button {
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.card {
+  background: white;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+}
+/* ---------- FULL WIDTH HEADER ---------- */
+.top-header {
+  width: 100%;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.header-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 18px 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* THIS is the key */
+}
+
+/* LEFT TITLE */
+.portal-title {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+/* ---------- TABS ---------- */
+.tabs {
+  display: flex;
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.tab {
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: white;
+  cursor: pointer;
+  font-weight: 500;
+    color: #0f172a;
+}
+
+.tab.active {
+  background: #2563eb;
+  color: white;
+  border-color: #2563eb;
+}
+
+/* ---------- FILTERS ---------- */
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filter {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: white;
+  font-size: 0.85rem;
+  cursor: pointer;
+    color: #0f172a; 
+}
+
+.filter.active {
+  background: #e0e7ff;
+  border-color: #2563eb;
+  color: #1e3a8a;
+}
+/* ---------- TABLE WRAPPER ---------- */
+.section table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: white;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+/* ---------- TABLE HEADER ---------- */
+.section thead {
+  background: #f1f5f9;
+}
+
+.section th {
+  padding: 14px 18px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: left;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* ---------- TABLE BODY ---------- */
+.section td {
+  padding: 14px 18px;
+  font-size: 0.95rem;
+  color: #0f172a;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+/* ---------- ROW HOVER ---------- */
+.section tbody tr:hover {
+  background: #f8fafc;
+}
+
+/* ---------- LAST ROW CLEANUP ---------- */
+.section tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ---------- CATEGORY PILL ---------- */
+.section td:nth-child(2) {
+  font-weight: 600;
+}
+
+.section td:nth-child(2)::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+  background: #2563eb;
+}
+
+/* ---------- CATEGORY COLORS ---------- */
+.section td:nth-child(2):contains("Dept")::before {
+  background: #2563eb;
+}
+
+.section td:nth-child(2):contains("Meet")::before {
+  background: #16a34a;
+}
+
+.section td:nth-child(2):contains("Event")::before {
+  background: #9333ea;
+}
+
+.section td:nth-child(2):contains("Misc")::before {
+  background: #f59e0b;
+}
+
+/* ---------- EMPTY STATE ---------- */
+.section tbody:empty::after {
+  content: "No hour logs available";
+  display: block;
+  padding: 24px;
+  text-align: center;
+  color: #64748b;
+}
+/* ---------- CATEGORY TAGS ---------- */
+.category {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.category::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2563eb;
+}
+
+.category.dept::before {
+  background: #2563eb;
+}
+
+.category.meet::before {
+  background: #16a34a;
+}
+
+.category.event::before {
+  background: #9333ea;
+}
+
+.category.misc::before {
+  background: #f59e0b;
+}
+/* ---------- ADD HOUR FORM ---------- */
+.add-hour-card {
+  max-width: 1000px;
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.form-row label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 6px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-row input,
+.form-row select {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  font-size: 0.95rem;
+    min-width: 0;
+}
+
+.form-row input:focus,
+.form-row select:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+/* ---------- PRIMARY BUTTON ---------- */
+.primary-btn {
+  margin-top: 12px;
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  background: #2563eb;
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+
+.primary-btn:hover {
+  background: #1e40af;
+}
+/* ---------- SCROLLABLE TABLE ---------- */
+.table-container {
+  max-height: 360px;      /* 👈 adjust as needed */
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 14px;
+}
+
+/* Smooth scrolling */
+.table-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #cbd5f5;
+  border-radius: 999px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #a5b4fc;
+}
+/* ---------- LOGIN PAGE ---------- */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: linear-gradient(
+    135deg,
+    #1e40af,
+    #2563eb,
+    #3b82f6
+  );
+}
+
+.login-card {
+  background: white;
+  padding: 40px 48px;
+  border-radius: 20px;
+  text-align: center;
+  width: 100%;
+  max-width: 420px;
+
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.login-card h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+
+.login-card p {
+  font-size: 0.95rem;
+  color: #475569;
+  margin-bottom: 24px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.nss-logo {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+}
+/* ---------- ADD HOURS HEADER ---------- */
+.add-hours-header {
+  margin-bottom: 24px;   /* space before the form */
+}
+
+.add-hours-header h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.add-hours-header p {
+  font-size: 0.95rem;
+  color: #64748b;
+}
