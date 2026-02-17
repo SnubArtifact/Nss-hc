@@ -4,8 +4,8 @@ A unified repository for the NSS Hour Count management system.
 
 ## Project Structure
 
-- `NSS_Hour_Count_Frontend`: React/Vite frontend application.
-- `nss-hour-count-backend`: Express/TypeScript/Prisma backend application.
+- `frontend`: React/Vite frontend application.
+- `backend`: Express/TypeScript/Prisma backend application.
 
 ## Getting Started
 
@@ -19,20 +19,20 @@ A unified repository for the NSS Hour Count management system.
 1. Clone the repository.
 2. Install dependencies for both parts:
    ```bash
-   cd NSS_Hour_Count_Frontend && npm install
-   cd ../nss-hour-count-backend && npm install
+   cd frontend && npm install
+   cd ../backend && npm install
    ```
 
 ### Running Locally
 
-1. Setup environment variables in `nss-hour-count-backend/.env` (see `.env.template`).
+1. Setup environment variables in `backend/.env` (see `.env.template`).
 2. Run backend:
    ```bash
-   cd nss-hour-count-backend && npm run dev
+   cd backend && npm run dev
    ```
 3. Run frontend:
    ```bash
-   cd NSS_Hour_Count_Frontend && npm run dev
+   cd frontend && npm run dev
    ```
 
 ## Development
