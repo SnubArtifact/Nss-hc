@@ -1,5 +1,5 @@
 export type Role = "Member" | "Excomm" | "Coordinator" | "Trio";
-export type HourCategory = "Dept" | "Meet" | "Event" | "Misc";
+export type HourCategory = "Dept" | "Meet" | "Event" | "Misc" | "HR";
 
 export interface Department {
   id: number;
@@ -13,6 +13,7 @@ export interface HourLog {
   startTime: string;
   endTime: string;
   seniorPresent?: string;
+  status: "Pending" | "Approved" | "Rejected";
 }
 
 export interface User {

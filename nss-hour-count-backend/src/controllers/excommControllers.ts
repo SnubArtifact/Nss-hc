@@ -171,7 +171,7 @@ export const getMembers = async (req: Req, res: Res) => {
       res.status(404).json({ message: "Members not found" });
       return;
     }
-  } catch (err) {}
+  } catch (err) { }
 };
 
 export const getViewLogs = async (req: Req, res: Res) => {
@@ -266,17 +266,19 @@ export const postLogApprove = [
       validationHelper(req, res);
 
       const { id } = req.body;
+      const logId = parseInt(id as string);
       const triggerUser = req.user as User;
 
       const hourLog = await prisma.hourLogs.findUnique({
         where: {
-          id: id,
+          id: logId,
         },
         select: {
           user: {
             select: {
               id: true,
               departmentId: true,
+              role: true,
             },
           },
           startTime: true,
@@ -287,10 +289,18 @@ export const postLogApprove = [
       });
 
       if (hourLog && hourLog.user) {
+        console.log("Approve Request:", {
+          triggerUser: { role: triggerUser.role, dept: triggerUser.departmentId },
+          targetUser: { role: hourLog.user.role, dept: hourLog.user.departmentId },
+          logId: logId
+        });
+
         if (
           triggerUser.role === Role.Excomm &&
-          hourLog.user.departmentId !== triggerUser.departmentId
+          (hourLog.user.departmentId !== triggerUser.departmentId ||
+            hourLog.user.role !== Role.Member)
         ) {
+          console.log("Approval Forbidden: Checks failed");
           res.status(403).json({ message: "Action forbidden" });
           return;
         }
@@ -309,9 +319,12 @@ export const postLogApprove = [
             },
             data: incObj,
           }),
-          prisma.hourLogs.delete({
+          prisma.hourLogs.update({
             where: {
-              id: id,
+              id: logId,
+            },
+            data: {
+              status: "Approved",
             },
           }),
         ]);
@@ -354,11 +367,12 @@ export const postLogReject = [
       validationHelper(req, res);
 
       const { id } = req.body;
+      const logId = parseInt(id as string);
       const user = req.user as User;
 
       const log = await prisma.hourLogs.findUnique({
         where: {
-          id: id,
+          id: logId,
         },
         select: {
           user: {
@@ -382,13 +396,16 @@ export const postLogReject = [
         return;
       }
 
-      const deletedLog = await prisma.hourLogs.delete({
+      const deletedLog = await prisma.hourLogs.update({
         where: {
-          id: id,
+          id: logId,
+        },
+        data: {
+          status: "Rejected",
         },
       });
 
-      res.status(200).json({ message: "Log deleted", deletedLog });
+      res.status(200).json({ message: "Log rejected", deletedLog });
     } catch (err) {
       if (
         err instanceof Prisma.PrismaClientKnownRequestError &&
@@ -402,3 +419,48 @@ export const postLogReject = [
     }
   },
 ];
+
+export const getPendingLogs = async (req: Req, res: Res) => {
+  try {
+    const user = req.user as User;
+
+    let whereClause: Prisma.HourLogsWhereInput = {
+      status: "Pending",
+    };
+
+    if (user.role === Role.Excomm) {
+      whereClause = {
+        ...whereClause,
+        user: {
+          departmentId: user.departmentId,
+          role: Role.Member,
+        },
+      };
+    }
+
+    const pendingLogs = await prisma.hourLogs.findMany({
+      where: whereClause,
+      include: {
+        user: {
+          select: {
+            name: true,
+            role: true,
+            department: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: {
+        submittedAt: "asc",
+      },
+    });
+
+    res.status(200).json({ message: "Success", logs: pendingLogs });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};

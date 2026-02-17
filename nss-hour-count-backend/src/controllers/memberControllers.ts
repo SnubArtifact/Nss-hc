@@ -1,5 +1,10 @@
 import { Prisma, Role, User } from "@prisma/client";
-import { addHoursHelper, validationHelper } from "../lib/adminHelpers";
+import {
+  addHoursHelper,
+  validationHelper,
+  getTimeDiff,
+  returnIncrementObjectFromCategory,
+} from "../lib/adminHelpers";
 import { combineDateTime } from "../lib/memberHelpers";
 import { validateHourLog } from "../lib/memberSchemas";
 import { prisma } from "../lib/prisma";
@@ -24,8 +29,8 @@ export const postLogHours = [
       } = req.body;
 
       if (startDate && startTime && endDate && endTime && task) {
-        const startDateTime = combineDateTime(startTime, startDate);
-        const endDateTime = combineDateTime(endTime, endDate);
+        const startDateTime = combineDateTime(startDate, startTime);
+        const endDateTime = combineDateTime(endDate, endTime);
 
         if (endDateTime <= startDateTime) {
           res
@@ -35,7 +40,29 @@ export const postLogHours = [
         }
 
         if (user.role === Role.Coordinator || user.role === Role.Trio) {
-          addHoursHelper(req, res, startDateTime, endDateTime, category);
+          const diffHr = getTimeDiff(startDateTime, endDateTime);
+          const incObj = returnIncrementObjectFromCategory(diffHr, category);
+
+          const [newLog, updatedUser] = await prisma.$transaction([
+            prisma.hourLogs.create({
+              data: {
+                startTime: startDateTime,
+                endTime: endDateTime,
+                task: task,
+                userId: user.id,
+                seniorPresent: seniorPresent ? seniorPresent : null,
+                category: category,
+                status: "Approved",
+              },
+            }),
+            prisma.user.update({
+              where: { id: user.id },
+              data: incObj,
+            }),
+          ]);
+
+          res.status(201).json({ message: "Log created and approved", newLog });
+          return;
         }
 
         const newLog = await prisma.hourLogs.create({
@@ -46,6 +73,7 @@ export const postLogHours = [
             userId: user.id,
             seniorPresent: seniorPresent ? seniorPresent : null,
             category: category,
+            status: "Pending",
           },
         });
 

@@ -66,9 +66,10 @@ export const addHoursHelper = async (
   const differenceMS = endDateTime.getTime() - startDateTime.getTime();
   const differenceHr = differenceMS / (1000 * 60 * 60);
 
+  console.log(`Adding hours for user ${user.id}: ${differenceHr} in category ${category}`);
   const incObj = returnIncrementObjectFromCategory(differenceHr, category);
+  console.log("Increment object:", JSON.stringify(incObj));
 
-  // add this to the existing hour count of the user
   const updatedUser = await prisma.user.update({
     where: {
       id: user.id,
@@ -77,6 +78,7 @@ export const addHoursHelper = async (
   });
 
   if (updatedUser) {
+    console.log(`User ${user.id} updated. New Dept hours: ${updatedUser.hourCountDept}`);
     res.status(200).json({ message: "Hours added" });
     return;
   }
@@ -135,18 +137,19 @@ export function returnIncrementObjectFromCategory(
 ) {
   let incrementObject: {
     hourCountDept?: {
-      increment: typeof hrCount;
+      increment: number;
     };
     hourCountEvent?: {
-      increment: typeof hrCount;
+      increment: number;
     };
     hourCountMisc?: {
-      increment: typeof hrCount;
+      increment: number;
     };
     hourCountMeet?: {
-      increment: typeof hrCount;
+      increment: number;
     };
-  };
+  } = {};
+
   switch (category) {
     case "Dept":
       incrementObject = {
@@ -154,24 +157,32 @@ export function returnIncrementObjectFromCategory(
           increment: hrCount,
         },
       };
+      break;
     case "Event":
       incrementObject = {
         hourCountEvent: {
           increment: hrCount,
         },
       };
+      break;
     case "Meet":
       incrementObject = {
         hourCountMeet: {
           increment: hrCount,
         },
       };
+      break;
     case "Misc":
       incrementObject = {
         hourCountMisc: {
           increment: hrCount,
         },
       };
+      break;
+    case "HR":
+      // HR hours are not tracked in User model columns currently
+      incrementObject = {};
+      break;
   }
 
   return incrementObject;

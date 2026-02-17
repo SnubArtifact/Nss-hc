@@ -12,16 +12,20 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       if (profile && profile.emails && profile.emails[0]) {
+        console.log("Google Auth Profile Email:", profile.emails[0].value);
         try {
           const user = await prisma.user.findUnique({
             where: { email: profile.emails[0].value },
           });
 
           if (user) {
+            console.log("User found:", user.email);
             return done(null, user);
           }
+          console.log("User not found in database.");
           return done(null, false, { message: "User not found." });
         } catch (err) {
+          console.error("Error in Google Auth:", err);
           return done(err);
         }
       }

@@ -28,6 +28,13 @@ enum HourCategories {
   Meet
   Event
   Misc
+  HR
+}
+
+enum LogStatus {
+  Pending
+  Approved
+  Rejected
 }
 
 model User {
@@ -55,6 +62,7 @@ model HourLogs {
   task          String
   seniorPresent String?
   category      HourCategories @default(Misc)
+  status        LogStatus      @default(Pending)
 }
 
 model Session {

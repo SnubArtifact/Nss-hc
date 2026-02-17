@@ -17,11 +17,15 @@ export default function AddHourModal({ onAdd }: { onAdd: () => void }) {
         return;
       }
 
+      const adjustedEndDate = endTime < startTime
+        ? dayjs(date).add(1, 'day').toISOString()
+        : dayjs(date).toISOString();
+
       await addHour({
         task,
         category,
         startDate: dayjs(date).toISOString(),
-        endDate: dayjs(date).toISOString(),
+        endDate: adjustedEndDate,
         startTime,
         endTime,
         seniorPresent: seniorPresent || undefined,

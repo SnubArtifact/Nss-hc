@@ -3,6 +3,7 @@ import { Router } from "express";
 import {
   deleteRemoveUser,
   getMembers,
+  getPendingLogs,
   getViewLogs,
   postAddUser,
   postLogApprove,
@@ -127,6 +128,26 @@ excommRouter.get(
   "/members",
   checkRole([Role.Excomm, Role.Coordinator, Role.Trio]),
   getMembers
+);
+
+/**
+ * @swagger
+ * /api/moderator/pending:
+ *   get:
+ *     summary: Get pending logs for verification
+ *     tags: [ExComm]
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: List of pending logs
+ *       403:
+ *         description: Forbidden
+ */
+excommRouter.get(
+  "/pending",
+  checkRole([Role.Excomm, Role.Coordinator, Role.Trio]),
+  getPendingLogs
 );
 
 /**

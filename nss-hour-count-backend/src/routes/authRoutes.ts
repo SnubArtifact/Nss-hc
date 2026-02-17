@@ -1,6 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
-import { getAuthStatus, logout } from "../controllers/authControllers";
+import { getAuthStatus, logout, devLogin } from "../controllers/authControllers";
 
 /**
  * @swagger
@@ -90,5 +90,28 @@ authRouter.get(
     failureRedirect: `${process.env.BASE_URL}/auth-failed`,
   })
 );
+
+/**
+ * @swagger
+ * /api/auth/dev-login:
+ *   post:
+ *     summary: Development specific login bypass
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Logged in successfully
+ */
+if (process.env.NODE_ENV !== 'production') {
+  authRouter.post("/dev-login", devLogin);
+}
 
 export default authRouter;

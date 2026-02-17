@@ -3,9 +3,9 @@ import { body } from "express-validator";
 export const validateHourLog = [
   body("startDate")
     .trim()
-    .toDate()
     .isISO8601()
-    .withMessage("Invalid date format. Date must follow ISO8601 format"),
+    .withMessage("Invalid date format. Date must follow ISO8601 format")
+    .toDate(),
   body("endDate")
     .trim()
     .isISO8601()

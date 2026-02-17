@@ -18,6 +18,8 @@ type AuthContextType = {
   isLoggedIn: boolean;
   user: User | null;
   login: () => void;
+  logout: () => void;
+  refreshUser: () => Promise<void>;
   isLoading: boolean;
 };
 
@@ -47,11 +49,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const login = () => {
-    window.location.href = "http://localhost:3000/api/auth/google";
+    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+    window.location.href = `${API_URL}/api/auth/google`;
+  };
+
+  const logout = () => {
+    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+    window.location.href = `${API_URL}/api/auth/logout`;
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, user, login, isLoading }}>
+    <AuthContext.Provider
+      value={{ isLoggedIn, user, login, logout, refreshUser: checkAuth, isLoading }}
+    >
       {children}
     </AuthContext.Provider>
   );

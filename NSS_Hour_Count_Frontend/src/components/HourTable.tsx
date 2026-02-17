@@ -6,21 +6,36 @@ export default function HourTable({ logs }: any) {
       <thead>
         <tr>
           <th>Task</th>
-          <th>Category</th>
+          <th style={{ textAlign: "center" }}>Category</th>
           <th>Start</th>
           <th>End</th>
+          <th>Status</th>
         </tr>
       </thead>
       <tbody>
         {logs?.map((log: any) => (
           <tr key={log.id}>
             <td>{log.task}</td>
-            <td className={`category ${log.category.toLowerCase()}`}>
-  {log.category}
-</td>
+            <td style={{ textAlign: "center" }}>
+              <span className={`category-pill ${log.category.toLowerCase()}`}>
+                {log.category}
+              </span>
+            </td>
 
             <td>{dayjs(log.startTime).format("DD MMM HH:mm")}</td>
             <td>{dayjs(log.endTime).format("DD MMM HH:mm")}</td>
+            <td>
+              <span style={{
+                padding: '4px 8px',
+                borderRadius: '4px',
+                fontSize: '0.8rem',
+                fontWeight: '600',
+                background: log.status === 'Approved' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(245, 158, 11, 0.1)',
+                color: log.status === 'Approved' ? '#10b981' : '#f59e0b'
+              }}>
+                {log.status || 'Pending'}
+              </span>
+            </td>
           </tr>
         ))}
       </tbody>

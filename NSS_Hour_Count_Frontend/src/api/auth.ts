@@ -1,3 +1,4 @@
 export const login = () => {
-  window.location.href = "http://localhost:3000/api/auth/google";
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+  window.location.href = `${API_URL}/api/auth/google`;
 };
