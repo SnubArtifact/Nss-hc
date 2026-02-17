@@ -30,8 +30,8 @@ export default function HourTable({ logs }: any) {
                 borderRadius: '4px',
                 fontSize: '0.8rem',
                 fontWeight: '600',
-                background: log.status === 'Approved' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(245, 158, 11, 0.1)',
-                color: log.status === 'Approved' ? '#10b981' : '#f59e0b'
+                background: log.status === 'Approved' ? 'rgba(16, 185, 129, 0.1)' : log.status === 'Rejected' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(245, 158, 11, 0.1)',
+                color: log.status === 'Approved' ? '#10b981' : log.status === 'Rejected' ? '#ef4444' : '#f59e0b'
               }}>
                 {log.status || 'Pending'}
               </span>

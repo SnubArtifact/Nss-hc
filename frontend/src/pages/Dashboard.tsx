@@ -17,7 +17,7 @@ export default function Dashboard() {
   const { user, logout, refreshUser, isLoading: authLoading } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const { showToast } = useToast();
-  const [activeTab, setActiveTab] = useState<"view" | "add" | "verify" | "members">("view");
+  const [activeTab, setActiveTab] = useState<"view" | "add" | "verify" | "members" | "rejected">("view");
   const [category, setCategory] = useState("All");
   const [logs, setLogs] = useState<any[]>([]);
   const [hrHours, setHrHours] = useState(0);
@@ -172,6 +172,7 @@ export default function Dashboard() {
 
   const approvedLogs = logs.filter(log => log.status === "Approved");
   const pendingLogs = logs.filter(log => log.status === "Pending");
+  const rejectedLogs = logs.filter(log => log.status === "Rejected");
 
   const filteredLogs =
     category === "All"
@@ -219,6 +220,12 @@ export default function Dashboard() {
             onClick={() => setActiveTab("add")}
           >
             Add Hours
+          </button>
+          <button
+            className={activeTab === "rejected" ? "tab active" : "tab"}
+            onClick={() => setActiveTab("rejected")}
+          >
+            Rejected
           </button>
           {["SecondYearPORHolder", "Coordinator", "Trio"].includes(user?.role || "") && (
             <>
@@ -284,8 +291,28 @@ export default function Dashboard() {
                   </div>
                 </div>
               )}
+
             </section>
           </>
+        )}
+
+        {/* REJECTED HOURS */}
+        {activeTab === "rejected" && (
+          <section className="section">
+            <div className="add-hours-header">
+              <h2>Rejected Hours</h2>
+              <p>View your hour logs that were not approved</p>
+            </div>
+            {rejectedLogs.length > 0 ? (
+              <div className="table-container" style={{ border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+                <HourTable logs={rejectedLogs} />
+              </div>
+            ) : (
+              <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>
+                No rejected logs found
+              </div>
+            )}
+          </section>
         )}
 
         {/* VERIFY HOURS */}
