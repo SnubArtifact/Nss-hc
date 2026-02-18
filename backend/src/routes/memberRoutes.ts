@@ -5,7 +5,7 @@ import {
   getProfile,
   postLogHours,
 } from "../controllers/memberControllers";
-import { checkRole } from "../middleware/authMiddleware";
+import { checkRole, requireAuth } from "../middleware/authMiddleware";
 
 /**
  * @swagger
@@ -114,6 +114,6 @@ memberRouter.get(
   getMyHourLogs
 );
 
-memberRouter.get("/profile", getProfile);
+memberRouter.get("/profile", requireAuth, getProfile);
 
 export default memberRouter;

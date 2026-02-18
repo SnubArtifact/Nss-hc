@@ -1,16 +1,22 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import nssLogo from "../assets/nss-logo.png";
 
 export default function Login() {
-  const { login } = useAuth();
+  const { login, isLoggedIn, isLoading } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (isLoggedIn && !isLoading) {
+      navigate("/");
+    }
+  }, [isLoggedIn, isLoading, navigate]);
+
   const handleLogin = () => {
     login();
-    navigate("/");
   };
 
   return (
