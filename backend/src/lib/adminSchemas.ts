@@ -1,4 +1,5 @@
 import { body } from "express-validator";
+import { SECOND_YEAR_PORS } from "./constants";
 
 export const validateUser = [
   body("name")
@@ -17,6 +18,10 @@ export const validateUser = [
     .optional()
     .isInt({ min: 1, max: 8 })
     .withMessage("Invalid department ID"),
+  body("specificPosition")
+    .optional()
+    .isIn(SECOND_YEAR_PORS)
+    .withMessage("Invalid specific position"),
 ];
 
 export const validateUserIdAndDept = [

@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "User" ADD COLUMN     "hourCount" DOUBLE PRECISION NOT NULL DEFAULT 0.0;
