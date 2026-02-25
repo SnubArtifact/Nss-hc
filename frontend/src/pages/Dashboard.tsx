@@ -198,6 +198,11 @@ export default function Dashboard() {
           <div className="header-right">
             <span className="user-name">{user.name}</span>
             <span className="badge">{user.specificPosition || user.role}</span>
+            {user.department && (
+              <span className="badge" style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6', borderColor: 'rgba(59, 130, 246, 0.2)' }}>
+                {user.department.name}
+              </span>
+            )}
             <button className="theme-toggle-btn" onClick={toggleTheme} title={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}>
               {theme === "light" ? (
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>

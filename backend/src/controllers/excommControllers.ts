@@ -111,7 +111,7 @@ export const getMembers = async (req: Req, res: Res) => {
 
     const numericPage = Number(page) - 1;
     const numericAmount = Number(amount);
-    if (triggerUser.role === Role.SecondYearPORHolder) {
+    if (triggerUser.role === Role.SecondYearPORHolder || triggerUser.role === Role.Coordinator) {
       const [members, memberCount] = await getUsersHelper(
         triggerUser,
         numericPage,
@@ -203,7 +203,7 @@ export const getViewLogs = async (req: Req, res: Res) => {
 
       if (
         member.departmentId === user.departmentId &&
-        member.role === Role.Member
+        (user.role === Role.SecondYearPORHolder || user.role === Role.Coordinator ? member.role === Role.Member : true)
       ) {
         const [memberLogs, totalCount] = await prisma.$transaction([
           prisma.hourLogs.findMany({
@@ -297,7 +297,7 @@ export const postLogApprove = [
         });
 
         if (
-          triggerUser.role === Role.SecondYearPORHolder &&
+          (triggerUser.role === Role.SecondYearPORHolder || triggerUser.role === Role.Coordinator) &&
           (hourLog.user.departmentId !== triggerUser.departmentId ||
             hourLog.user.role !== Role.Member)
         ) {
@@ -390,7 +390,7 @@ export const postLogReject = [
       }
 
       if (
-        user.role === Role.SecondYearPORHolder &&
+        (user.role === Role.SecondYearPORHolder || user.role === Role.Coordinator) &&
         user.departmentId !== log.user.departmentId
       ) {
         res.status(403).json({ message: "Forbidden Action" });
@@ -429,7 +429,7 @@ export const getPendingLogs = async (req: Req, res: Res) => {
       status: "Pending",
     };
 
-    if (user.role === Role.SecondYearPORHolder) {
+    if (user.role === Role.SecondYearPORHolder || user.role === Role.Coordinator) {
       whereClause = {
         ...whereClause,
         user: {

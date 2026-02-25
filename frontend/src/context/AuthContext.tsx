@@ -8,6 +8,10 @@ export type User = {
   role: string;
   specificPosition?: string;
   departmentId?: number;
+  department?: {
+    id: number;
+    name: string;
+  };
   hourCountDept: number;
   hourCountMeet: number;
   hourCountEvent: number;
